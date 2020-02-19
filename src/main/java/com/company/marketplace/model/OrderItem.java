@@ -16,16 +16,16 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
-public class Purchase {
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userEmail;
-    private BigDecimal total;
+    private Product product;
 
-    @CreationTimestamp
-    private Date date;
+    private Integer quantity;
+
+    private  Order purchase;
 
 }

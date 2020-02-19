@@ -1,8 +1,8 @@
 package com.company.marketplace;
 
 import com.company.marketplace.model.Product;
-import com.company.marketplace.model.Purchase;
-import com.company.marketplace.repository.PurchaseRepository;
+import com.company.marketplace.model.Order;
+import com.company.marketplace.repository.OrderRepository;
 import com.company.marketplace.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,7 +20,7 @@ public class MarketplaceApplication {
     }
 
     @Bean
-	CommandLineRunner init(PurchaseRepository purchaseRepository, ProductRepository productRepository) {
+	CommandLineRunner init(OrderRepository orderRepository, ProductRepository productRepository) {
         return args -> {
             productRepository.deleteAll();
             LongStream.range(1, 11)
@@ -33,15 +33,15 @@ public class MarketplaceApplication {
                     .map(productRepository::save)
                     .forEach(System.out::println);
 
-            purchaseRepository.deleteAll();
+            orderRepository.deleteAll();
             LongStream.range(1, 11)
                     .mapToObj(i -> {
-                        Purchase p = new Purchase();
+                        Order p = new Order();
                         p.setUserEmail("john.doe@sample.com");
                         p.setTotal( i % 2 == 0 ? BigDecimal.TEN : new BigDecimal("7.00"));
                         return p;
                     })
-                    .map(purchaseRepository::save)
+                    .map(orderRepository::save)
                     .forEach(System.out::println);
         };
     }
