@@ -29,42 +29,4 @@ class MarketplaceApplicationTests {
 	void contextLoads() {
 	}
 
-	@DisplayName("given order with two order items, when persist using mongo repository, then order is saved")
-	@Test
-	void test() throws Exception {
-		// given
-		Order order = prepareTestOrderWithTwoOrderItems();
-
-		orderRepository.deleteAll();
-
-		// when
-		orderRepository.save(order);
-
-		// then
-		List<Order> foundOrders = orderRepository.findAll();
-		assertThat(foundOrders).hasSize(1);
-		List<OrderItem> items = foundOrders.iterator()
-				.next()
-				.getOrderItems();
-		assertThat(items).hasSize(2);
-		assertThat(items).containsOnlyElementsOf(order.getOrderItems());
-	}
-
-	private Order prepareTestOrderWithTwoOrderItems() {
-
-		Product p = createProduct("Red t-shirt", BigDecimal.ONE);
-		Product p2 = createProduct("Blue trousers", BigDecimal.TEN);
-
-		OrderItem item1 = new OrderItem(p, 2);
-		OrderItem item2 = new OrderItem(p2, 5);
-
-		return new Order("john.doe@test.com", Arrays.asList(item1, item2));
-	}
-
-	private Product createProduct(String name, BigDecimal price){
-		Product p = new Product();
-		p.setPrice(price);
-		p.setName(name);
-		return productRepository.save(p);
-	}
 }
