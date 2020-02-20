@@ -15,17 +15,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity
 public class OrderItem {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private Product product;
-
     private Integer quantity;
 
-    private  Order purchase;
-
+    public BigDecimal getSubTotal() {
+        return getProduct().getPrice().multiply(BigDecimal.valueOf(quantity));
+    }
 }

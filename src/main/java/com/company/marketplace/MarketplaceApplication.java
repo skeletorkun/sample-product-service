@@ -1,5 +1,6 @@
 package com.company.marketplace;
 
+import com.company.marketplace.model.OrderItem;
 import com.company.marketplace.model.Product;
 import com.company.marketplace.model.Order;
 import com.company.marketplace.repository.OrderRepository;
@@ -33,16 +34,17 @@ public class MarketplaceApplication {
                     .map(productRepository::save)
                     .forEach(System.out::println);
 
-            orderRepository.deleteAll();
-            LongStream.range(1, 11)
-                    .mapToObj(i -> {
-                        Order p = new Order();
-                        p.setUserEmail("john.doe@sample.com");
-                        p.setTotal( i % 2 == 0 ? BigDecimal.TEN : new BigDecimal("7.00"));
-                        return p;
-                    })
-                    .map(orderRepository::save)
-                    .forEach(System.out::println);
+//            orderRepository.deleteAll();
+//            LongStream.range(1, 11)
+//                    .mapToObj(i -> {
+//                        Order p = new Order();
+//
+//                        p.setUserEmail("john.doe@sample.com");
+//                        p.setTotal( i % 2 == 0 ? BigDecimal.TEN : new BigDecimal("7.00"));
+//                        return p;
+//                    })
+//                    .map(orderRepository::save)
+//                    .forEach(System.out::println);
         };
     }
 }
