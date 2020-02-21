@@ -21,7 +21,7 @@ public class MarketplaceApplication {
     }
 
     @Bean
-	CommandLineRunner init(OrderRepository orderRepository, ProductRepository productRepository) {
+	CommandLineRunner init(ProductRepository productRepository) {
         return args -> {
             productRepository.deleteAll();
             LongStream.range(1, 11)
@@ -34,17 +34,6 @@ public class MarketplaceApplication {
                     .map(productRepository::save)
                     .forEach(System.out::println);
 
-//            orderRepository.deleteAll();
-//            LongStream.range(1, 11)
-//                    .mapToObj(i -> {
-//                        Order p = new Order();
-//
-//                        p.setUserEmail("john.doe@sample.com");
-//                        p.setTotal( i % 2 == 0 ? BigDecimal.TEN : new BigDecimal("7.00"));
-//                        return p;
-//                    })
-//                    .map(orderRepository::save)
-//                    .forEach(System.out::println);
         };
     }
 }

@@ -17,6 +17,12 @@ public class OrderItem {
         this.subTotal = calculateSubTotal(product, quantity);
     }
 
+    /**
+     * Calculates the sub total for a quantity of the same product
+     * @param product
+     * @param quantity
+     * @return
+     */
     public BigDecimal calculateSubTotal(Product product, Integer quantity) {
         return product.getPrice().multiply(BigDecimal.valueOf(quantity));
     }

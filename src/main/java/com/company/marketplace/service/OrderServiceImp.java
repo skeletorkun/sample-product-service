@@ -31,24 +31,33 @@ public class OrderServiceImp implements OrderService {
 
         List<OrderItem> items = new ArrayList<>();
         for (CreateOrderItemDTO i : dtoOrderItems){
-
-            // check if the product exists in db
-            Long id = i.getProductId();
-            Optional<Product> productInRepository = productRepository.findById(id);
-            if(!productInRepository.isPresent()){
-                throw new ProductNotFoundException("Please create the product first #id:" + id);
-            }
-
-            // check quantity
-            if(i.getQuantity() < 1 || i.getQuantity() > MAX_ALLOWED_QUANTITY){
-                String err = String.format("Invalid quantity (%d) on product #id%d", i.getQuantity(), id);
-                throw new InvalidOrderException(err);
-            }
-
-            OrderItem orderItem = new OrderItem(productInRepository.get(), i.getQuantity());
+            Product productInRepository = checkInput(i);
+            OrderItem orderItem = new OrderItem(productInRepository, i.getQuantity());
             items.add(orderItem);
         }
 
         return orderRepository.save(new Order(createOrderDTO.getUserEmail(), items));
+    }
+
+    /**
+     * Applies some checks on the order item input
+     * @param itemDTO
+     * @return
+     */
+    private Product checkInput(CreateOrderItemDTO itemDTO) {
+        // check if the product exists in db
+        Long id = itemDTO.getProductId();
+        Optional<Product> productInRepository = productRepository.findById(id);
+        if(!productInRepository.isPresent()){
+            throw new ProductNotFoundException("Please create the product first #id:" + id);
+        }
+
+        // check quantity
+        if(itemDTO.getQuantity() < 1 || itemDTO.getQuantity() > MAX_ALLOWED_QUANTITY){
+            String err = String.format("Invalid quantity (%d) on product #id%d", itemDTO.getQuantity(), id);
+            throw new InvalidOrderException(err);
+        }
+
+        return productInRepository.get();
     }
 }

@@ -67,8 +67,8 @@ class OrderServiceTests {
                 .getOrderItems();
         assertThat(items).hasSize(2);
         assertThat(items.toString()).isEqualTo("[" +
-				"OrderItem(product=Product(id=11, name=Blue T-Shirt, price=22.00), quantity=2), " +
-				"OrderItem(product=Product(id=12, name=Red Trousers, price=12.00), quantity=3)]");
+                "OrderItem(product=Product(id=" + p1.getId() + ", name=Blue T-Shirt, price=22.00), quantity=2, subTotal=44.00), " +
+                "OrderItem(product=Product(id=" + p2.getId() + ", name=Red Trousers, price=12.00), quantity=3, subTotal=36.00)]");
     }
 
 
@@ -76,12 +76,12 @@ class OrderServiceTests {
     @Test
     void testCreateOrderInvalidProduct() {
 
-		// given
-		List<CreateOrderItemDTO> i = Collections.singletonList(new CreateOrderItemDTO(9999L, 2));
-		CreateOrderDTO input = new CreateOrderDTO("user.email@buzz.com", i);
+        // given
+        List<CreateOrderItemDTO> i = Collections.singletonList(new CreateOrderItemDTO(9999L, 2));
+        CreateOrderDTO input = new CreateOrderDTO("user.email@buzz.com", i);
 
-		// when & then
-		assertThrows(ProductNotFoundException.class, () -> orderService.create(input));
+        // when & then
+        assertThrows(ProductNotFoundException.class, () -> orderService.create(input));
     }
 
     private Product createProduct(String name, BigDecimal price) {

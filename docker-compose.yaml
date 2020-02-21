@@ -1,0 +1,30 @@
+version: '3'
+services:
+  marketplace-mongodb:
+    container_name: marketplace-mongodb
+    image: mongo:3.6
+    restart: always
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null # --quiet
+
+  marketplace-mariadb:
+    container_name: marketplace-mariadb
+    image: mariadb
+    restart: always
+    environment:
+      - MYSQL_DATABASE=marketplace
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=root
+
+  marketplace:
+    image: marketplace-app
+    ports:
+      - 8080:8080
+    command: mvn clean spring-boot:run
+    depends_on:
+      - marketplace-mongodb
+      - marketplace-mariadb
