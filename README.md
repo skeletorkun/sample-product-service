@@ -17,6 +17,9 @@ Orders:
 
 ### Installation
 
+to run the dependencies - mariadb, mongodb
+
+docker-compose up -d 
 
 ```
 docker pull devorkun/marketplace:0.0.1

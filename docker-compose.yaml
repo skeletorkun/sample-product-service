@@ -1,9 +1,9 @@
 version: '3'
 services:
   marketplace-mongodb:
-    container_name: marketplace-mongodb
     image: mongo:3.6
     restart: always
+    hostname: marketplace-mongodb
     environment:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
@@ -12,19 +12,27 @@ services:
     command: mongod --smallfiles --logpath=/dev/null # --quiet
 
   marketplace-mariadb:
-    container_name: marketplace-mariadb
     image: mariadb
     restart: always
+    hostname: marketplace-mariadb
+    ports:
+      - 3306:3306
     environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
       - MYSQL_DATABASE=marketplace
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=root
+      - MYSQL_PASSWORD=marketplace
+      - MYSQL_USER=marketplace
 
-  marketplace:
+  marketplace-app:
     image: marketplace-app
+    build: .
     ports:
       - 8080:8080
-    command: mvn clean spring-boot:run
     depends_on:
       - marketplace-mongodb
       - marketplace-mariadb
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://marketplace-mariadb:3306/marketplace?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+      - SPRING_DATASOURCE_USERNAME=marketplace
+      - SPRING_DATASOURCE_PASSWORD=marketplace
+      - SPRING_DATA_MONGODB_URI=mongodb://marketplace-mongodb:27017/marketplace
