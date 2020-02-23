@@ -29,8 +29,6 @@ public class OrderServiceImp implements OrderService {
     public Order create(CreateOrderDTO createOrderDTO){
         List<CreateOrderItemDTO> dtoOrderItems = createOrderDTO.getOrderItems();
 
-//        dtoOrderItems.stream().map(i -> { new OrderItem(this.checkInput(i), i.getQuantity()))
-
         List<OrderItem> items = new ArrayList<>();
         for (CreateOrderItemDTO i : dtoOrderItems){
             Product productInRepository = checkInput(i);
